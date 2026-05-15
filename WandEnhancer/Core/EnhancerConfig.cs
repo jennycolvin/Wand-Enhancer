@@ -79,13 +79,15 @@ namespace WandEnhancer.Core
                     EPatchType.DisableUpdates,
                     new[]
                     {
+                        // Regex consumes 4 closing parens (`)))) `); the 5th (registerHandler's own close)
+                        // remains in the original file after replacement. Patch must end with 3 parens — NOT 4.
                         new PatchEntry
                         {
                             CandidateFileNames = new[] { "index.js" },
                             SearchHints = new[] { "ACTION_CHECK_FOR_UPDATE" },
                             Target = new Regex(@"registerHandler\(""ACTION_CHECK_FOR_UPDATE"".*?\)\)\)\)",
                                 RegexOptions.Singleline),
-                            Patch = "registerHandler(\"ACTION_CHECK_FOR_UPDATE\",(e=>expectUpdateFeedUrl(e,(e=>null))))"
+                            Patch = "registerHandler(\"ACTION_CHECK_FOR_UPDATE\",(e=>expectUpdateFeedUrl(e,(e=>null)))"
                         }
                     }
                 },
